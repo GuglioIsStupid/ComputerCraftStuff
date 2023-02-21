@@ -1,2 +1,4 @@
 NBS Player: pastebin run 5vaJeT44
 Video Player: pastebin run KMRmKTc1
+Gif Player: pastebin get 5uk9uRjC GIF
+bbpack (Needed for gif): pastebin get cUYTGbpb bbpack
