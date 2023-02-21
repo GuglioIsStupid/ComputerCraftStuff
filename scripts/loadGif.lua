@@ -1,9 +1,25 @@
--- Found from https://www.computercraft.info/forums2/index.php?/topic/28231-nfp-viewer-nfp-as-startup/
+-- example from https://www.computercraft.info/forums2/index.php?/topic/23056-gif-api/
+os.loadAPI("GIF")
 
-if not fs.exists( "package" ) then shell.run( "pastebin get cUYTGbpb package" ) end
-if not fs.exists( "GIF" ) then shell.run( "pastebin get 5uk9uRjC GIF" ) end
+local mon = peripheral.find("monitor")
 
-os.loadAPI( "package" )
-os.loadAPI( "GIF" )
+local gifs = fs.find("*.gif")  -- Note: fs.find() is case-sensitive, even if your file system isn't.
 
-GIF.animateGIF( GIF.loadGIF( "yourGIF.gif" ), 1, 1, peripheral.find( "monitor", function(side, ob) ob.setTextScale(0.5) return ob.isColour() end ) )
+mon.setTextScale(0.5)
+local x, y = mon.getSize()
+
+while true do for i = 1, #gifs do
+        local image = GIF.loadGIF(gifs[i])
+        mon.setBackgroundColour(image[1].transparentCol or image.backgroundCol)
+        mon.clear()
+        
+        parallel.waitForAny(
+                function()
+                        GIF.animateGIF(image, math.floor((x - image.width) / 2) + 1, math.floor((y - image.height) / 2) + 1, mon)
+                end,
+                
+                function()
+                        sleep(10)
+                end
+        )
+end end
